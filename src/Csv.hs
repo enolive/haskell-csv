@@ -15,10 +15,10 @@ csvFile = f <$ many anyChar <* eof
     f = CsvFile (CsvHeaders []) (CsvLines [])
 
 csvHeaders :: Parser CsvHeaders
-csvHeaders = f <$> sepBy csvHeader (char ',')
+csvHeaders = f <$> sepBy csvHeader (spaces *> char ',' *> spaces)
   where
     f hs = CsvHeaders hs
-    csvHeader = many (satisfy (/= ','))
+    csvHeader = many (noneOf " ,")
 
 csvLines :: Parser CsvLines
 csvLines = CsvLines [] <$ sepBy (many1 anyChar) endOfLine

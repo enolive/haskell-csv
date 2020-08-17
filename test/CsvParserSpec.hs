@@ -21,6 +21,8 @@ spec =
         regularParse csvHeaders "column" `shouldBe` Right (CsvHeaders ["column"]) 
       it "parses comma separated multiple columns" $
         regularParse csvHeaders "first,second" `shouldBe` Right (CsvHeaders ["first", "second"])
+      it "ignores whitespaces between columns" $ 
+        regularParse csvHeaders "first       , second"`shouldBe` Right (CsvHeaders ["first", "second"])
     context "parsing whole file" $ do
       it "parses empty file" $
         parseFromFile csvFile "example-files/empty.csv" `shouldReturn` Right (CsvFile (CsvHeaders []) (CsvLines []))
