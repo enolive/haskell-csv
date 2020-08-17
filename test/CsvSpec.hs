@@ -1,14 +1,14 @@
 {-# OPTIONS_GHC -Wno-unused-top-binds #-}
 
-module CsvParserSpec
+module CsvSpec
   ( spec,
   )
 where
 
-import Test.Hspec
-import Text.Parsec.String
 import Csv
 import ParseFunctions
+import Test.Hspec
+import Text.Parsec.String
 
 main :: IO ()
 main = hspec spec
@@ -18,11 +18,13 @@ spec =
   describe "CSV Parser" $ do
     context "parsing headers" $ do
       it "parses single column" $
-        regularParse csvHeaders "column" `shouldBe` Right (CsvHeaders ["column"]) 
+        regularParse csvHeaders "column" `shouldBe` Right (CsvHeaders ["column"])
       it "parses comma separated multiple columns" $
         regularParse csvHeaders "first,second" `shouldBe` Right (CsvHeaders ["first", "second"])
-      it "ignores whitespaces between columns" $ 
-        regularParse csvHeaders "first       , second"`shouldBe` Right (CsvHeaders ["first", "second"])
+      it "ignores whitespaces between columns" $
+        regularParse csvHeaders "first       , second" `shouldBe` Right (CsvHeaders ["first", "second"])
+      it "parses quoted columns" $
+        regularParse csvHeaders "\"first\",\"second,third\"" `shouldBe` Right (CsvHeaders ["first", "second,third"])
     context "parsing whole file" $ do
       it "parses empty file" $
         parseFromFile csvFile "example-files/empty.csv" `shouldReturn` Right (CsvFile (CsvHeaders []) (CsvLines []))
