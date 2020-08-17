@@ -16,22 +16,22 @@ main = hspec spec
 spec :: Spec
 spec =
   describe "CSV Parser" $ do
-    context "parsing headers" $ do
+    context "parsing lines" $ do
       it "parses single column" $
-        regularParse csvHeaders "column" `shouldBe` Right (CsvHeaders ["column"])
+        regularParse csvLine "first" `shouldBe` Right (CsvLine ["first"])
       it "parses comma separated multiple columns" $
-        regularParse csvHeaders "first,second" `shouldBe` Right (CsvHeaders ["first", "second"])
+        regularParse csvLine "first,second,third" `shouldBe` Right (CsvLine ["first", "second", "third"])
       it "ignores whitespaces between columns" $
-        regularParse csvHeaders "first       , second" `shouldBe` Right (CsvHeaders ["first", "second"])
+        regularParse csvLine "first       , second" `shouldBe` Right (CsvLine ["first", "second"])
       it "parses quoted columns" $
-        regularParse csvHeaders "\"first\",\"second,third\"" `shouldBe` Right (CsvHeaders ["first", "second,third"])
+        regularParse csvLine "\"first\",\"second,third\"" `shouldBe` Right (CsvLine ["first", "second,third"])
     context "parsing whole file" $ do
       it "parses empty file" $
-        parseFromFile csvFile "example-files/empty.csv" `shouldReturn` Right (CsvFile (CsvHeaders []) (CsvLines []))
+        parseFromFile csvFile "example-files/empty.csv" `shouldReturn` Right (CsvFile (CsvLine []) [CsvLine []])
       xit "parses file with single column" $
         parseFromFile csvFile "example-files/single-column.csv"
           `shouldReturn` Right
             ( CsvFile
-                (CsvHeaders ["column"])
-                (CsvLines ["first", "second", "third"])
+                (CsvLine ["column"])
+                [CsvLine ["first", "second", "third"]]
             )
