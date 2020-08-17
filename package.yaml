@@ -1,0 +1,49 @@
+name:                haskell-csv
+version:             0.1.0.0
+github:              "Github username here/haskell-csv"
+license:             MIT
+author:              "Author name here"
+maintainer:          "Author email here"
+copyright:           "2019 Author name here"
+# synopsis: A new project for TDD with Haskell.
+# description: haskell-csv see README.md for further details.
+# category: Other
+
+extra-source-files:
+  - README.md
+  - package.yaml
+  - LICENSE.md
+
+ghc-options: -Wall
+
+dependencies:
+  - base >= 4.7 && < 5
+  - parsec
+  - containers
+
+library:
+  source-dirs: src
+
+executables:
+  haskell-csv-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - haskell-csv
+
+tests:
+  haskell-csv-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - haskell-csv
+      - hspec
+      - QuickCheck
