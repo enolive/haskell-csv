@@ -16,7 +16,9 @@ newtype CsvHeaders = CsvHeaders [String] deriving (Show, Eq)
 newtype CsvLines = CsvLines [String] deriving (Show, Eq)
 
 csvFile :: Parser CsvFile
-csvFile = CsvFile (CsvHeaders []) (CsvLines []) <$ eof
+csvFile = f <$ eof
+  where
+    f = CsvFile (CsvHeaders []) (CsvLines [])
 
 main :: IO ()
 main = hspec spec
