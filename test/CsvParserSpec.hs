@@ -7,25 +7,25 @@ where
 
 import Test.Hspec
 import Text.Parsec.String
-import Text.Parsec
-
-data CsvFile = CsvFile CsvHeaders CsvLines deriving (Show, Eq)
-
-newtype CsvHeaders = CsvHeaders [String] deriving (Show, Eq)
-
-newtype CsvLines = CsvLines [String] deriving (Show, Eq)
-
-csvFile :: Parser CsvFile
-csvFile = f <$ eof
-  where
-    f = CsvFile (CsvHeaders []) (CsvLines [])
+import Csv
+import ParseFunctions
 
 main :: IO ()
 main = hspec spec
 
 spec :: Spec
 spec =
-  describe "CSV Parser" $
-    context "whatever" $
+  describe "CSV Parser" $ do
+    context "parsing headers" $ do
+      it "parses single column" $
+        regularParse csvHeaders "column" `shouldBe` Right (CsvHeaders ["column"]) 
+    context "parsing whole file" $ do
       it "parses empty file" $
         parseFromFile csvFile "example-files/empty.csv" `shouldReturn` Right (CsvFile (CsvHeaders []) (CsvLines []))
+      xit "parses file with single column" $
+        parseFromFile csvFile "example-files/single-column.csv"
+          `shouldReturn` Right
+            ( CsvFile
+                (CsvHeaders ["column"])
+                (CsvLines ["first", "second", "third"])
+            )
